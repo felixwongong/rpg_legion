@@ -6,7 +6,8 @@ namespace CofyDev.RpgLegend
     {
         public void ShowPanel(bool enable)
         {
-            gameObject.SetActive(true);
+            gameObject.SetActive(enable);
+            ControlUIPanel.instance.ShowPanel(enable);
         }
     }
 }

@@ -14,6 +14,7 @@ public class CMBootstrapUI : BootstrapUI
         List<Future<GameObject>> futures = new List<Future<GameObject>>();
 
         futures.Add(uiRoot.Bind<BattleUIPanel>(LoadUIAssetAsync("Panel/battle_panel")));
+        futures.Add(uiRoot.Bind<ControlUIPanel>(LoadUIAssetAsync("Panel/control_panel")));
 
         if (futures.Count == 0)
         {
