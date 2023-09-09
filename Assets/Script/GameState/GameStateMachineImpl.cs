@@ -11,7 +11,7 @@ namespace CofyDev.RpgLegend
         
         private GameStateMachineImpl() 
         {
-            sm = new StateMachine();
+            sm = new StateMachine(true);
             sm.RegisterState(new BattleState());
         }
         

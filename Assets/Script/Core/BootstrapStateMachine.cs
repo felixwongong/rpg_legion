@@ -9,7 +9,7 @@ public class BootstrapStateMachine: Instance<BootstrapStateMachine>
 
     public BootstrapStateMachine()
     {
-        sm = new StateMachine();
+        sm = new StateMachine(true);
 
         sm.RegisterState(new CMBootstrapUI());
         sm.RegisterState(new BootstrapUGS());
