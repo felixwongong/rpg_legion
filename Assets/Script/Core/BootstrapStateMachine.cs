@@ -1,20 +1,23 @@
 using CofyDev.RpgLegend;
 using CofyEngine;
-using UnityEngine;
+using CofyEngine.Engine.Util;
 using UnityEngine.AddressableAssets;
 
-public class BootstrapStateMachine : MonoBehaviour
+public class BootstrapStateMachine: Instance<BootstrapStateMachine>
 {
     private StateMachine sm;
 
-    private void Awake()
+    public BootstrapStateMachine()
     {
         sm = new StateMachine();
 
         sm.RegisterState(new CMBootstrapUI());
         sm.RegisterState(new BootstrapUGS());
         sm.RegisterState(new TerminateState(GameStateMachineImpl.instance));
+    }
 
+    public void Init()
+    {
         Addressables.InitializeAsync(true).Future().OnCompleted(_ =>
         {
             sm.GoToNextState<CMBootstrapUI>();
