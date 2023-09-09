@@ -4,8 +4,12 @@ namespace CofyDev.RpgLegend
 {
     public class GameStateMachineImpl: GameStateMachine
     {
+        private static GameStateMachineImpl _instance;
+        public static GameStateMachineImpl instance { get { return _instance ??= MonoUtils.createDDOL<GameStateMachineImpl>(); } }
+        
         private StateMachine sm;
-        protected void Awake()
+        
+        private GameStateMachineImpl() 
         {
             sm = new StateMachine();
             sm.RegisterState(new BattleState());

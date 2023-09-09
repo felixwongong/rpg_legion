@@ -1,10 +1,9 @@
+using CofyDev.RpgLegend;
 using CofyEngine;
 using UnityEngine;
 
 public class BootstrapStateMachine : MonoBehaviour
 {
-    [SerializeField] private GameStateMachine _gsm;
-    
     private StateMachine sm;
 
     private void Awake()
@@ -13,8 +12,8 @@ public class BootstrapStateMachine : MonoBehaviour
         
         sm.RegisterState(new CMBootstrapUI());
         sm.RegisterState(new BootstrapUGS());
-        sm.RegisterState(new TerminateState());
+        sm.RegisterState(new TerminateState(GameStateMachineImpl.instance));
 
-        sm.GoToNextState<BootstrapUI>();
+        sm.GoToNextState<CMBootstrapUI>();
     }
 }
