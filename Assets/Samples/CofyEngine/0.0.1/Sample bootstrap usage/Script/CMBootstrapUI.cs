@@ -9,7 +9,7 @@ public class CMBootstrapUI : BootstrapUI
 {
     protected override Future<List<GameObject>> LoadAll()
     {
-        var uiRoot = UIRoot.Singleton;
+        var uiRoot = UIRoot.instance;
 
         List<Future<GameObject>> futures = new List<Future<GameObject>>();
 
