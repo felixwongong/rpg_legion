@@ -1,87 +1,78 @@
-﻿using System;
-using System.Numerics;
+﻿using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.OnScreen;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 namespace CofyDev.RpgLegend
 {
-    public class CofyJoystick: OnScreenControl, IPointerDownHandler, IPointerUpHandler, IDragHandler
+    public class CofyJoystick : OnScreenControl
     {
-        //REF
-        private RectTransform _parentRect;
-        private RectTransform _rectTransform;
-
-        protected override string controlPathInternal { get => m_ControlPath; set => m_ControlPath = value; }
-
+        //Ref
+        [SerializeField] private CofyJoystickArea _area;
+        [SerializeField] private RectTransform _knob;
         public float movementRange
         {
             get => m_MovementRange;
             set => m_MovementRange = value;
         }
-
-        //CONFIG
-        [SerializeField] private float m_MovementRange = 100;
-        [SerializeField] private Vector2 axisSnapZone = Vector2.zero;
-
+        
+        //Config
         [InputControl(layout = "Vector2"), SerializeField]
         private string m_ControlPath;
-
-        //STATE
-        private Vector2 initPos;
-        private Vector2 pointerStart_Local;
-        private Vector2 pointerEnd_Local;
-        private Vector2 pointerEnd_Screen;
-        private Vector2 delta;
+        [SerializeField] private float m_MovementRange = 100;
+        [SerializeField] private Vector2 axisSnapZone = Vector2.zero;
+        
+        //State
+        private RectTransform _rect;
+        private Vector2 _initPos;
+        
+        //OnScreenControl
+        protected override string controlPathInternal { get => m_ControlPath; set => m_ControlPath = value; }
 
         private void Awake()
         {
-            var tf = transform;
-            _parentRect = tf.parent.GetComponentInParent<RectTransform>();
-            _rectTransform = (RectTransform) tf;
+            if (!_area)
+            {
+                FLog.LogWarning("Joystick area not set");
+                _area = transform.parent.GetComponentInChildren<CofyJoystickArea>();
+            }
+
+            _rect = (RectTransform)transform;
         }
 
         private void Start()
         {
-            initPos = _rectTransform.anchoredPosition;
+            _area.registerPointer(OnPointerDown, OnPointerDrag, OnPointerUp);
+
+            _initPos = _rect.anchoredPosition;
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        private void OnPointerUp()
         {
-            if (eventData == null) throw new ArgumentNullException(nameof(eventData));
+            _rect.anchoredPosition = _initPos;
+            _knob.anchoredPosition = Vector2.zero;
             
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentRect, eventData.position,
-                eventData.pressEventCamera, out pointerStart_Local);
-            _rectTransform.anchoredPosition = pointerStart_Local;
+            SendValueToControl(Vector2.zero);
         }
 
-        public void OnDrag(PointerEventData eventData)
+        private void OnPointerDrag(Vector2 delta)
         {
-            if (eventData == null) throw new ArgumentNullException(nameof(eventData));
-
-
-            pointerEnd_Screen = eventData.position;
-
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                _parentRect, pointerEnd_Screen, eventData.pressEventCamera,
-                out  pointerEnd_Local);
-            
-            
-            delta = pointerEnd_Local - pointerStart_Local;
             delta = Vector2.ClampMagnitude(delta, movementRange);
-            
-            _rectTransform.anchoredPosition = initPos + delta;
+            _knob.anchoredPosition = delta;
+
+            delta /= movementRange;
+
+            if (math.abs(delta.x) < axisSnapZone.x) delta.x = 0;
+            if (math.abs(delta.y) < axisSnapZone.y) delta.y = 0;
+
+            FLog.Log(delta);
             
             SendValueToControl(delta);
         }
-        
-        public void OnPointerUp(PointerEventData eventData)
+
+        private void OnPointerDown(Vector2 location)
         {
-            _rectTransform.anchoredPosition = initPos;
-            SendValueToControl(Vector2.zero);
+            _rect.anchoredPosition = location;
         }
     }
 }
