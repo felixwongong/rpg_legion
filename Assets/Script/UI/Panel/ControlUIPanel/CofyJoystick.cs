@@ -65,14 +65,19 @@ namespace CofyDev.RpgLegend
             if (math.abs(delta.x) < axisSnapZone.x) delta.x = 0;
             if (math.abs(delta.y) < axisSnapZone.y) delta.y = 0;
 
-            FLog.Log(delta);
-            
+            // FLog.LogObject(new TestStruct() {value = "test", v1 = "v1"});
             SendValueToControl(delta);
         }
 
         private void OnPointerDown(Vector2 location)
         {
             _rect.anchoredPosition = location;
+        }
+        
+        public struct TestStruct
+        {
+            public string value;
+            public string v1;
         }
     }
 }

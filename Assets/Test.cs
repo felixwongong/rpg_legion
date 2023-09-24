@@ -1,40 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using CofyEngine.Engine;
-using OpenCover.Framework.Model;
+using System;
 using UnityEditor;
 using UnityEngine;
 
-public class Test 
+public class Test: MonoBehaviour
 {
-    [MenuItem("Test/Test Pooling")]
+    [MenuItem("Test/Test Casting")]
     public static void TestPooling()
     {
-        var count = 1000000;
-
-        ClassSmall[] smalls = new ClassSmall[count];
-        
-        var pool = new CtorObjectPool<ClassSmall>();
-
-        Stopwatch sw = new Stopwatch();
-        
-        sw.Start();
-
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < 1000; i++)
         {
-
-            smalls[i] = pool.Get();
+            FLog.Log("10");
         }
-        
-        sw.Stop();
-
-        FLog.Log($"only get, pool time: {sw.ElapsedMilliseconds}");
     }
 
-    public class ClassSmall
+    private void Update()
     {
-        public double d1;
-        public string s1;
+        Test.TestPooling();
     }
 }
