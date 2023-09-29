@@ -65,7 +65,6 @@ namespace CofyDev.RpgLegend
             if (math.abs(delta.x) < axisSnapZone.x) delta.x = 0;
             if (math.abs(delta.y) < axisSnapZone.y) delta.y = 0;
 
-            // FLog.LogObject(new TestStruct() {value = "test", v1 = "v1"});
             SendValueToControl(delta);
         }
 

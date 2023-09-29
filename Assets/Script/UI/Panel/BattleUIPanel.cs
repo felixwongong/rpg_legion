@@ -2,9 +2,9 @@
 
 namespace CofyDev.RpgLegend
 {
-    public class BattleUIPanel: UIInstance<BattleUIPanel>, IUIPanel
+    public class BattleUIPanel: UIPanel<BattleUIPanel>
     {
-        public void ShowPanel(bool enable)
+        public override void ShowPanel(bool enable)
         {
             gameObject.SetActive(enable);
             ControlUIPanel.instance.ShowPanel(enable);

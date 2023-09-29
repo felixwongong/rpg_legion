@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CofyEngine.Editor;
 using Engine.Util;
 using UnityEngine;
@@ -8,7 +7,7 @@ namespace CofyEngine
 {
     public class ClientMain : MonoInstance<ClientMain>
     {
-        [Scene]
+        [CofyScene]
         [SerializeField]
         public List<string> persistentScenes;
 
