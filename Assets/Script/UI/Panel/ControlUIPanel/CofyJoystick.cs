@@ -72,11 +72,5 @@ namespace CofyDev.RpgLegend
         {
             _rect.anchoredPosition = location;
         }
-        
-        public struct TestStruct
-        {
-            public string value;
-            public string v1;
-        }
     }
 }
