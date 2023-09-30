@@ -8,7 +8,6 @@ namespace CofyEngine
     public class ClientMain : MonoInstance<ClientMain>
     {
         [CofyScene]
-        [SerializeField]
         public List<string> persistentScenes;
 
         private void Start()

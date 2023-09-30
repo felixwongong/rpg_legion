@@ -1,33 +1,25 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
 
-namespace CofyDev.RpgLegendr
+namespace CofyDev.RpgLegend
 {
     public class TopDownController : MonoBehaviour
     {
-        [SerializeField]
-        private PlayerInput _input;
+        [SerializeField] 
+        private InputReceiver _receiver;
 
         private void Awake()
         {
-            _input ??= GetComponent<PlayerInput>();
-            if(!_input) FLog.LogException(new ArgumentNullException(nameof(_input)));
+            _receiver ??= GetComponent<InputReceiver>();
         }
 
-        private void OnEnable()
+        private void Start()
         {
-            _input.onActionTriggered += ReceiveInputAction;
+            _receiver.onVec2Updated += OnMove;
         }
 
-        private void OnDisable()
+        private void OnMove(Vector2 value)
         {
-            _input.onActionTriggered -= ReceiveInputAction;
-        }
-
-        private void ReceiveInputAction(InputAction.CallbackContext context)
-        {
-            FLog.Log("Input received", context);
+            FLog.LogObject(value);
         }
     }
 }
