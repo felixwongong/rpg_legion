@@ -37,7 +37,9 @@ namespace CofyDev.RpgLegend
         {
             switch (context.action.expectedControlType)
             {
-               case "Vector2": onVec2Updated(context.ReadValue<Vector2>()); break;
+               case "Vector2":
+                   onVec2Updated?.Invoke(context.ReadValue<Vector2>());
+                   break;
             }
         }
     }
