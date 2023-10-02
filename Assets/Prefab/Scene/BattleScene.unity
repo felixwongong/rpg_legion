@@ -168,6 +168,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 235733546035331687, guid: 1c0cbbabddd8e16498b0d0ba9e47ceee, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 235733546035331687, guid: 1c0cbbabddd8e16498b0d0ba9e47ceee, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -543,7 +547,7 @@ EdgeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
+  m_EdgeRadius: 0.33
   m_Points:
   - {x: -19.161638, y: 2.4167485}
   - {x: -12.774064, y: 2.6668575}
@@ -946,7 +950,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 286297452}
   m_Father: {fileID: 0}
@@ -993,10 +997,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 847c66b8fac84c74b8e5e557e26924ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterTransform: {fileID: 0}
-  _input: {fileID: 0}
-  _rb: {fileID: 0}
-  speed: {x: 10, y: 7}
+  _input: {fileID: 2009435746}
+  _rb: {fileID: 2009435748}
+  velocity_Max: {x: 10, y: 6}
+  accelerationTime: 0.03
+  decelerationTime: 0.015
 --- !u!50 &2009435748
 Rigidbody2D:
   serializedVersion: 4

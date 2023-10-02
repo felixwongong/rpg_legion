@@ -1,21 +1,28 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace CofyDev.RpgLegend
 {
     [RequireComponent(typeof(PlayerInput))]
     public class TopDownController : MonoBehaviour
     {
+        [Header("Reference")]
         [SerializeField] private PlayerInput _input;
         [SerializeField] private Rigidbody2D _rb;
 
-        [SerializeField] private Vector2 speed;
+        [FormerlySerializedAs("maxSpeed")]
+        [Header("Configurations")]
+        [SerializeField] private Vector2 velocity_Max;
+        [SerializeField] private float accelerationTime;
+        [SerializeField] private float decelerationTime;
 
         private Vector3 _initScale;
 
         //STATE
-        private Vector2 m_direction;
+        private Vector2 inputDirection;
+        private Vector2 velocity_Current;
 
         private void Awake()
         {
@@ -45,31 +52,37 @@ namespace CofyDev.RpgLegend
 
         private void Update()
         {
-            if (m_direction != Vector2.zero)
+            if (inputDirection != Vector2.zero)
             {
-                _rb.velocity = m_direction * speed;
                 HandleFlip();
+                
+                velocity_Current = Vector2.SmoothDamp(velocity_Current, inputDirection * velocity_Max, ref velocity_Current, accelerationTime);
             }
             else
             {
-                _rb.velocity = Vector2.zero;
+                velocity_Current = Vector2.SmoothDamp(velocity_Current, Vector2.zero, ref velocity_Current, decelerationTime);
             }
+
+            Debug.Log($"{velocity_Current.x}, {velocity_Current.y}");
+
+            _rb.velocity = velocity_Current;
         }
 
         private void HandleFlip()
         {
-            if (m_direction.x != 0)
+            if (inputDirection.x != 0)
             {
-                transform.localScale = new Vector3(Math.Sign(m_direction.x) * _initScale.x, _initScale.y, _initScale.z);
+                transform.localScale =
+                    new Vector3(Math.Sign(inputDirection.x) * _initScale.x, _initScale.y, _initScale.z);
             }
         }
 
         private void OnMoveReceived(InputAction.CallbackContext context)
         {
-            if (context.canceled) m_direction = Vector2.zero;
+            if (context.canceled) inputDirection = Vector2.zero;
             else if (context.performed)
             {
-                m_direction = context.ReadValue<Vector2>();
+                inputDirection = context.ReadValue<Vector2>();
             }
         }
     }
