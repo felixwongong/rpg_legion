@@ -1,64 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using CofyEngine.Engine;
+using CofyEngine;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace CofyDev.RpgLegend
 {
+    public enum AnimState
+    {
+        Run, RunState, Jump
+    }
+    
     public class CofyAnimator: MonoBehaviour
     {
         [Header("Reference")]
         [SerializeField] private Animator _animator;
-        [SerializeField] private List<Animation> registerEventAnimations;
+
+        [SerializeField] private AnimationEvent _event;
         
-        public static readonly string Run = "Run";
-        public static readonly string RunState = "RunState";
-        public static readonly string Jump = "Jump";
-
-        private event Action<string> onAnimationEnd;
-
         private void Awake()
         {
             if (!_animator) _animator = GetComponentInChildren<Animator>();
+            if (!_event) _event = GetComponentInChildren<AnimationEvent>();
         }
 
-        private void OnDisable()
+        public void RegisterAnimEnd(Action<string> callback)
         {
-            onAnimationEnd = null;
-        }
-
-        public void RegisterAnimEnd(string animName, Action<string> callback)
-        {
-            onAnimationEnd += callback;
+            _event.RegisterCallback(callback);
         }
         
-        public void SetStateValue(string state, float value)
+        public void SetStateValue(AnimState state, float value)
         {
             value = math.clamp(value, 0, 1);
             
-            _animator.SetFloat(state, 0.5f * value);
+            _animator.SetFloat(state.toStringCached(), 0.5f * value);
         }
 
-        public void SetTrigger(string trigger)
+        public void SetTrigger(AnimState trigger)
         {
-            _animator.SetTrigger(trigger);
+            _animator.SetTrigger(trigger.toStringCached());
         }
 
-        public void Play(string stateName)
+        public void Play(AnimState state)
         {
-            _animator.Play(stateName);
-            
-            for (var i = 0; i < registerEventAnimations.Count; i++)
-            {
-                if (registerEventAnimations[i].name != stateName) continue;
-                
-                UnityFrameScheduler.instance.AddDelay(registerEventAnimations[i].clip.length, () =>
-                {
-                    onAnimationEnd?.Invoke(stateName);
-                });
-                break;
-            }
+            _animator.Play(state.toStringCached());
         }
     }
 }

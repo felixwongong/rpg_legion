@@ -24,7 +24,7 @@ namespace CofyDev.RpgLegend
 
         private void OnEnable()
         {
-            _animator.RegisterAnimEnd(CofyAnimator.Jump, animName =>
+            _animator.RegisterAnimEnd(animName =>
             {
                 _jumpPromise?.Resolve(true);
             });
@@ -33,11 +33,10 @@ namespace CofyDev.RpgLegend
         void IPromiseState.StartContext(IPromiseSM sm)
         {
             _jumpPromise = new Promise<bool>();
-            _animator.Play(CofyAnimator.Jump);
+            _animator.Play(AnimState.Jump);
             
             _jumpPromise.OnSucceed(_ =>
             {
-                Debug.Log("Jump end");
                 sm.GoToState<MoveState>();
             });
         }

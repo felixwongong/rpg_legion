@@ -41,7 +41,8 @@ namespace CofyDev.RpgLegend
             {
                 case "Move":
                 {
-                    if(currentState is not JumpState) GoToStateNoRepeat<MoveState>();
+                    if(currentState is not JumpState && currentState  is not MoveState)
+                        GoToStateNoRepeat<MoveState>();
                     _moveState.OnMoveInput(context);
                     break;
                 }

@@ -9,7 +9,6 @@ namespace CofyDev.RpgLegend
     public class MoveState : MonoBehaviour, IPromiseState
     {
         [Header("Reference")]
-        [SerializeField] private PlayerInput _input;
         [SerializeField] private Rigidbody2D _rb;
         [SerializeField] private CofyAnimator _animator;
 
@@ -22,12 +21,12 @@ namespace CofyDev.RpgLegend
 
         //STATE
         private Vector2 inputDirection;
+        private Vector2 inputDirection_Cached;
         private Vector2 velocity_Current;
         [SerializeField] private bool enableMovement;
 
         private void Awake()
         {
-            if(!_input) _input = GetComponent<PlayerInput>();
             if(!_rb) _rb = GetComponent<Rigidbody2D>();
             if(!_animator) _animator = GetComponent<CofyAnimator>();
 
@@ -51,7 +50,7 @@ namespace CofyDev.RpgLegend
             }
 
             _rb.velocity = velocity_Current;
-            _animator.SetStateValue(CofyAnimator.RunState, velocity_Current.magnitude / velocity_Max.magnitude);
+            _animator.SetStateValue(AnimState.RunState, velocity_Current.magnitude / velocity_Max.magnitude);
         }
 
         private void HandleFlip()
@@ -66,8 +65,9 @@ namespace CofyDev.RpgLegend
         public void OnMoveInput(InputAction.CallbackContext context)
         {
             if (!enableMovement) return;
-            
-            if (context.canceled) inputDirection = Vector2.zero;
+
+            if (context.canceled)
+                resetInputDirection();
             else if (context.performed)
             {
                 inputDirection = context.ReadValue<Vector2>();
@@ -77,14 +77,25 @@ namespace CofyDev.RpgLegend
         void IPromiseState.StartContext(IPromiseSM sm)
         {
             if (!enableMovement)
-                _animator.Play(CofyAnimator.RunState);
+                _animator.Play(AnimState.RunState);
             
             enableMovement = true;
+            
+            if (inputDirection_Cached.notNullOrDefault())
+            {
+                inputDirection = inputDirection_Cached;
+            }
         }
 
         void IPromiseState.OnEndContext()
         {
             enableMovement = false;
+            resetInputDirection();
+        }
+
+        private void resetInputDirection()
+        {
+            inputDirection_Cached = inputDirection;
             inputDirection = Vector2.zero;
         }
     }
