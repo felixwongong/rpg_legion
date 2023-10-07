@@ -21,7 +21,7 @@ public class CMBootstrapUI : BootstrapUI
             Promise<GameObject> nullDelayPromise = new Promise<GameObject>();
             futures.Add(nullDelayPromise.future);
             
-            UnityScheduler.instance.AddDelay(2000, () =>
+            UnityFrameScheduler.instance.AddDelay(2000, () =>
             {
                 nullDelayPromise.Resolve(null);
             });

@@ -172,6 +172,10 @@ PrefabInstance:
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 235733546035331687, guid: 1c0cbbabddd8e16498b0d0ba9e47ceee, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 235733546035331687, guid: 1c0cbbabddd8e16498b0d0ba9e47ceee, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -223,6 +227,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit000
       objectReference: {fileID: 0}
+    - target: {fileID: 3291061371756635806, guid: 1c0cbbabddd8e16498b0d0ba9e47ceee, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: c2fc0aafc4ba14749a6cc196ffeb52b8, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -928,7 +936,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2009435745}
+  - component: {fileID: 2009435751}
   - component: {fileID: 2009435747}
+  - component: {fileID: 2009435752}
+  - component: {fileID: 2009435750}
   - component: {fileID: 2009435746}
   - component: {fileID: 2009435748}
   - component: {fileID: 2009435749}
@@ -999,9 +1010,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _input: {fileID: 2009435746}
   _rb: {fileID: 2009435748}
+  _animator: {fileID: 0}
   velocity_Max: {x: 10, y: 6}
   accelerationTime: 0.03
   decelerationTime: 0.015
+  enableMovement: 0
 --- !u!50 &2009435748
 Rigidbody2D:
   serializedVersion: 4
@@ -1074,6 +1087,48 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.54200834, y: 0.13965997}
   m_EdgeRadius: 0
+--- !u!114 &2009435750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009435744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31125d24483f5174f8eb631fda29d585, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
+  registerEventAnimations:
+  - {fileID: 0}
+--- !u!114 &2009435751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009435744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08af7d4a836b06245bb47dfc3c152263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logging: 0
+  _input: {fileID: 0}
+--- !u!114 &2009435752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009435744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08e32fe6c50e8aa4488ae1a0e395047f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
 --- !u!1 &2116976438
 GameObject:
   m_ObjectHideFlags: 0

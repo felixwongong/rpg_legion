@@ -20,7 +20,7 @@ public class BootstrapStateMachine: Instance<BootstrapStateMachine>
     {
         Addressables.InitializeAsync(true).Future().OnCompleted(_ =>
         {
-            sm.GoToNextState<CMBootstrapUI>();
+            sm.GoToState<CMBootstrapUI>();
         });
     }
 }

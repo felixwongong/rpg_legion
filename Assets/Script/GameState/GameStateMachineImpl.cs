@@ -17,7 +17,7 @@ namespace CofyDev.RpgLegend
         
         public override void Init()
         {
-            sm.GoToNextState<BattleState>();
+            sm.GoToState<BattleState>();
         }
     }
 }
