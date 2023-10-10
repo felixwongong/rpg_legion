@@ -1,15 +1,10 @@
 ﻿using System;
-using CofyEngine;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace CofyDev.RpgLegend
 {
-    public enum AnimState
-    {
-        Run, RunState, Jump
-    }
-    
+    [DefaultExecutionOrder(-10)]
     public class CofyAnimator: MonoBehaviour
     {
         [Header("Reference")]
@@ -19,7 +14,7 @@ namespace CofyDev.RpgLegend
         
         private void Awake()
         {
-            if (!_animator) _animator = GetComponentInChildren<Animator>();
+            if(!_animator) _animator = GetComponentInChildren<Animator>();
             if (!_event) _event = GetComponentInChildren<AnimationEvent>();
         }
 
@@ -28,21 +23,21 @@ namespace CofyDev.RpgLegend
             _event.RegisterCallback(callback);
         }
         
-        public void SetStateValue(AnimState state, float value)
+        public void SetStateValue(string state, float value)
         {
             value = math.clamp(value, 0, 1);
             
-            _animator.SetFloat(state.toStringCached(), 0.5f * value);
+            _animator.SetFloat(state, 0.5f * value);
         }
 
-        public void SetTrigger(AnimState trigger)
+        public void SetTrigger(string trigger)
         {
-            _animator.SetTrigger(trigger.toStringCached());
+            _animator.SetTrigger(trigger);
         }
 
-        public void Play(AnimState state)
+        public void Play(string state)
         {
-            _animator.Play(state.toStringCached());
+            _animator.Play(state);
         }
     }
 }

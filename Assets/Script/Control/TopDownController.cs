@@ -17,6 +17,7 @@ namespace CofyDev.RpgLegend
             base.Awake();
             RegisterState(GetComponent<MoveState>());
             RegisterState(GetComponent<JumpState>());
+            RegisterState(GetComponent<AttackState>());
         }
 
         private void Start()
@@ -39,14 +40,9 @@ namespace CofyDev.RpgLegend
         {
             switch (context.action.name)
             {
-                case "Move":
-                {
-                    if(currentState is not JumpState && currentState  is not MoveState)
-                        GoToStateNoRepeat<MoveState>();
-                    _moveState.OnMoveInput(context);
-                    break;
-                }
+                case "Move": _moveState.OnMoveInput(context); break;
                 case "Jump": if(context.performed) GoToStateNoRepeat<JumpState>(); break;
+                case "Attack": if (context.performed)  GoToStateNoRepeat<AttackState>(); break;
             }
         }
     }

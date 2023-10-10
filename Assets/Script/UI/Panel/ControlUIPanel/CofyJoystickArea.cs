@@ -9,7 +9,6 @@ namespace CofyDev.RpgLegend
     {
         //Ref
         private RectTransform _parentRect;
-        private RectTransform _rectTransform;
 
         //Config
 
@@ -28,7 +27,6 @@ namespace CofyDev.RpgLegend
         {
             var tf = transform;
             _parentRect = tf.parent.GetComponentInParent<RectTransform>();
-            _rectTransform = (RectTransform) tf;
         }
 
         public void registerPointer(

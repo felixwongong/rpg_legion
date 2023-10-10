@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CofyEngine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,11 +6,10 @@ using UnityEngine.InputSystem;
 namespace CofyDev.RpgLegend
 {
     [RequireComponent(typeof(PlayerInput))]
-    public class MoveState : MonoBehaviour, IPromiseState
+    public class MoveState : AnimatedState
     {
         [Header("Reference")]
         [SerializeField] private Rigidbody2D _rb;
-        [SerializeField] private CofyAnimator _animator;
 
         [Header("Configurations")]
         [SerializeField] private Vector2 velocity_Max;
@@ -25,13 +24,12 @@ namespace CofyDev.RpgLegend
         private Vector2 velocity_Current;
         [SerializeField] private bool enableMovement;
 
-        private void Awake()
+        protected override void Awake()
         {
-            if(!_rb) _rb = GetComponent<Rigidbody2D>();
-            if(!_animator) _animator = GetComponent<CofyAnimator>();
-
-            _initScale = transform.localScale;
+            base.Awake();
             
+            if(!_rb) _rb = GetComponent<Rigidbody2D>();
+            _initScale = transform.localScale;
         }
 
         private void Update()
@@ -50,7 +48,7 @@ namespace CofyDev.RpgLegend
             }
 
             _rb.velocity = velocity_Current;
-            _animator.SetStateValue(AnimState.RunState, velocity_Current.magnitude / velocity_Max.magnitude);
+            animator.SetStateValue(EAnimState.RunState, velocity_Current.magnitude / velocity_Max.magnitude);
         }
 
         private void HandleFlip()
@@ -64,38 +62,44 @@ namespace CofyDev.RpgLegend
 
         public void OnMoveInput(InputAction.CallbackContext context)
         {
-            if (!enableMovement) return;
-
-            if (context.canceled)
-                resetInputDirection();
-            else if (context.performed)
+            var value = context.ReadValue<Vector2>();
+            
+            //Must use Value as action type
+            //Should never cancel in joystick input, if joystick reset, it sends zero value
+            if (context.canceled || context.control.device is not Joystick)
             {
-                inputDirection = context.ReadValue<Vector2>();
-            } 
+                inputDirection = inputDirection_Cached = Vector2.zero;
+                return;
+            }
+
+            if (!enableMovement || value == Vector2.zero)
+            {
+                inputDirection = inputDirection_Cached = Vector2.zero;
+            }
+            
+            inputDirection = context.ReadValue<Vector2>();
         }
 
-        void IPromiseState.StartContext(IPromiseSM sm)
+        protected override void StartContext(IPromiseSM sm, Promise<string> promise)
         {
             if (!enableMovement)
-                _animator.Play(AnimState.RunState);
+                animator.Play(EAnimState.RunState);
             
             enableMovement = true;
-            
-            if (inputDirection_Cached.notNullOrDefault())
-            {
-                inputDirection = inputDirection_Cached;
-            }
+            inputDirection = inputDirection_Cached;
+            Debug.Log($"applying cache {inputDirection_Cached.x}, {inputDirection_Cached.y}");
         }
 
-        void IPromiseState.OnEndContext()
+        public override void OnEndContext()
         {
+            base.OnEndContext();
             enableMovement = false;
-            resetInputDirection();
+            DisableInputWithCache();
         }
 
-        private void resetInputDirection()
+        public void DisableInputWithCache()
         {
-            inputDirection_Cached = inputDirection;
+            if(inputDirection != Vector2.zero) inputDirection_Cached = inputDirection; 
             inputDirection = Vector2.zero;
         }
     }

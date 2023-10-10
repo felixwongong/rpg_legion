@@ -51,7 +51,8 @@ namespace CofyDev.RpgLegend
         {
             _rect.anchoredPosition = _initPos;
             _knob.anchoredPosition = Vector2.zero;
-            
+
+            Debug.Log("Pointer up, sending zero");
             SendValueToControl(Vector2.zero);
         }
 
