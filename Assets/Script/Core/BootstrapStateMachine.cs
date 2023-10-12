@@ -1,6 +1,6 @@
 using CofyDev.RpgLegend;
 using CofyEngine;
-using CofyEngine.Engine.Util;
+using CofyEngine.Util;
 using UnityEngine.AddressableAssets;
 
 public class BootstrapStateMachine: Instance<BootstrapStateMachine>

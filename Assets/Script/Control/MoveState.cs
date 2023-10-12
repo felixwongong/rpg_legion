@@ -62,21 +62,12 @@ namespace CofyDev.RpgLegend
 
         public void OnMoveInput(InputAction.CallbackContext context)
         {
-            var value = context.ReadValue<Vector2>();
-            
-            //Must use Value as action type
-            //Should never cancel in joystick input, if joystick reset, it sends zero value
-            if (context.canceled || context.control.device is not Joystick)
+            if (context.canceled || !enableMovement)
             {
                 inputDirection = inputDirection_Cached = Vector2.zero;
                 return;
             }
 
-            if (!enableMovement || value == Vector2.zero)
-            {
-                inputDirection = inputDirection_Cached = Vector2.zero;
-            }
-            
             inputDirection = context.ReadValue<Vector2>();
         }
 

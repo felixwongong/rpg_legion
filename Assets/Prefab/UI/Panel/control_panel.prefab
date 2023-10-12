@@ -276,7 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _area: {fileID: 4918695436861877869}
   _knob: {fileID: 2128741081583583468}
-  m_ControlPath: <Joystick>/stick
+  m_ControlPath: <Gamepad>/leftStick
   m_MovementRange: 100
   axisSnapZone: {x: 0.3, y: 0.3}
 --- !u!1 &2631962050513435793
@@ -2918,7 +2918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ControlPath: <Gamepad>/buttonSouth
+  m_ControlPath: <Gamepad>/buttonEast
 --- !u!1 &9033695920298992610
 GameObject:
   m_ObjectHideFlags: 0
