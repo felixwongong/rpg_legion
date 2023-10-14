@@ -2,9 +2,15 @@
 {
     public class EAnimState
     {
-        public const string Run = "Run";
-        public const string RunState = "RunState";
-        public const string Jump = "Jump";
-        public const string AttackState = "AttackState";
+        //Animation Name
+        public const string A_Run = "A_Run";
+        public const string A_Jump = "A_Jump";
+        public const string A_Attack = "A_Attack";
+        
+        //Animation State
+        public const string S_Run = "S_Run";
+        
+        //Animator Parameters
+        public const string P_RunSpeed = "RunSpeed";
     }
 }

@@ -26,6 +26,8 @@ namespace CofyDev.RpgLegend
         private Vector2 velocity_Current;
         [SerializeField] private bool enableMovement;
 
+        protected override string animName => EAnimState.S_Run;
+
         protected override void Awake()
         {
             base.Awake();
@@ -54,7 +56,7 @@ namespace CofyDev.RpgLegend
             }
 
             _rb.velocity = velocity_Current;
-            animator.SetStateValue(EAnimState.RunState, velocity_Current.magnitude / velocity_Max.magnitude);
+            animator.SetFloat01(EAnimState.P_RunSpeed, velocity_Current.magnitude / velocity_Max.magnitude);
         }
 
         private void HandleFlip()
@@ -79,8 +81,7 @@ namespace CofyDev.RpgLegend
 
         public override void StartContext(IPromiseSM sm)
         {
-            if (!enableMovement)
-                animator.Play(EAnimState.RunState);
+            animator.PlayState(animName);
             
             EnableMovementWithCache();
         }

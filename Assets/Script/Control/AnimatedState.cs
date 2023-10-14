@@ -10,7 +10,9 @@ namespace CofyDev.RpgLegend
         [FormerlySerializedAs("_animator")] [SerializeField]
         protected CofyAnimator animator;
 
-        private Promise<string> _animPromise = new ();
+        private Promise<bool> _animEndPromise = new ();
+        
+        protected abstract string animName { get; }
         
         protected virtual void Awake()
         {
@@ -19,11 +21,11 @@ namespace CofyDev.RpgLegend
         
         protected virtual void OnEnable()
         {
-            animator.RegisterAnimEnd(animName =>
+            animator.RegisterAnimationEnd(animName, () =>
             {
-                _animPromise ??= new Promise<string>();
-                _animPromise?.Resolve(animName);
-                _animPromise?.Reset();
+                _animEndPromise ??= new Promise<bool>();
+                _animEndPromise?.Resolve(true);
+                _animEndPromise?.Reset();
             });
         }
 
@@ -31,12 +33,9 @@ namespace CofyDev.RpgLegend
             
         public virtual void OnEndContext() { }
         
-        protected void RegisterAnimationEndOnce(string animName, Action callback)
+        protected void RegisterAnimationEndOnce(Action callback)
         {
-            _animPromise.OnSucceed(inName =>
-            {
-                if (inName.Equals(animName)) callback?.Invoke();
-            });
+            _animEndPromise.OnSucceed(_ => { callback.Invoke(); });
         }
     }
 }
