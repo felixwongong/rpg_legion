@@ -1,4 +1,5 @@
-﻿using CofyEngine;
+﻿using System;
+using CofyEngine;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -26,14 +27,16 @@ namespace CofyDev.RpgLegend
             });
         }
 
-        public void StartContext(IPromiseSM sm)
-        {
-            StartContext(sm, _animPromise);
-        }
-
-        protected abstract void StartContext(IPromiseSM sm, Promise<string> promise);
+        public abstract void StartContext(IPromiseSM sm);
             
-
         public virtual void OnEndContext() { }
+        
+        protected void RegisterAnimationEndOnce(string animName, Action callback)
+        {
+            _animPromise.OnSucceed(inName =>
+            {
+                if (inName.Equals(animName)) callback?.Invoke();
+            });
+        }
     }
 }

@@ -19,7 +19,9 @@ namespace CofyDev.RpgLegend
         private Vector3 _initScale;
 
         //STATE
+        [SerializeField]
         private Vector2 inputDirection;
+        [SerializeField]
         private Vector2 inputDirection_Cached;
         private Vector2 velocity_Current;
         [SerializeField] private bool enableMovement;
@@ -34,7 +36,11 @@ namespace CofyDev.RpgLegend
 
         private void Update()
         {
-            if(!enableMovement) return;
+            if (!enableMovement)
+            {
+                _rb.velocity = Vector2.zero;
+                return;
+            }
             
             if (inputDirection != Vector2.zero)
             {
@@ -71,14 +77,12 @@ namespace CofyDev.RpgLegend
             inputDirection = context.ReadValue<Vector2>();
         }
 
-        protected override void StartContext(IPromiseSM sm, Promise<string> promise)
+        public override void StartContext(IPromiseSM sm)
         {
             if (!enableMovement)
                 animator.Play(EAnimState.RunState);
             
-            enableMovement = true;
-            inputDirection = inputDirection_Cached;
-            Debug.Log($"applying cache {inputDirection_Cached.x}, {inputDirection_Cached.y}");
+            EnableMovementWithCache();
         }
 
         public override void OnEndContext()
@@ -92,6 +96,12 @@ namespace CofyDev.RpgLegend
         {
             if(inputDirection != Vector2.zero) inputDirection_Cached = inputDirection; 
             inputDirection = Vector2.zero;
+        }
+
+        public void EnableMovementWithCache()
+        {
+            enableMovement = true;
+            inputDirection = inputDirection_Cached;
         }
     }
 }

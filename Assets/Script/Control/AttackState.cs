@@ -4,16 +4,13 @@ namespace CofyDev.RpgLegend
 {
     public class AttackState: AnimatedState
     {
-        protected override void StartContext(IPromiseSM sm, Promise<string> promise)
+        public override void StartContext(IPromiseSM sm)
         {
             sm.GetState<MoveState>().DisableInputWithCache();
             
             animator.Play(EAnimState.AttackState);                
             
-            promise.OnSucceed(animName =>
-            {
-                sm.GoToState<MoveState>();
-            });
+            RegisterAnimationEndOnce(EAnimState.AttackState, sm.GoToState<MoveState>);
         }
     }
 }

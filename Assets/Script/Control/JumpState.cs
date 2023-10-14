@@ -4,14 +4,12 @@ namespace CofyDev.RpgLegend
 {
     public class JumpState : AnimatedState
     {
-        protected override void StartContext(IPromiseSM sm, Promise<string> promise)
+        public override void StartContext(IPromiseSM sm)
         {
             animator.Play(EAnimState.Jump);
+            sm.GetState<MoveState>().EnableMovementWithCache();
             
-            promise.OnSucceed(_ =>
-            {
-                sm.GoToState<MoveState>();
-            });
+            RegisterAnimationEndOnce(EAnimState.Jump, sm.GoToState<MoveState>);
         }
     }
 }
