@@ -75,14 +75,14 @@ namespace CofyDev.RpgLegend
                 inputDirection = inputDirection_Cached = Vector2.zero;
                 return;
             }
+            
+            animator.PlayState(EAnimState.S_Run);
 
             inputDirection = context.ReadValue<Vector2>();
         }
 
         public override void StartContext(IPromiseSM sm)
         {
-            animator.PlayState(animName);
-            
             EnableMovementWithCache();
         }
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using CofyEngine;
 using Unity.Mathematics;
-using Unity.VisualScripting.Antlr3.Runtime.Collections;
 using UnityEngine;
 
 namespace CofyDev.RpgLegend
@@ -20,7 +19,7 @@ namespace CofyDev.RpgLegend
         private void Awake()
         {
             if(!_animator) _animator = GetComponentInChildren<Animator>();
-            if (!_event) _event = GetComponentInChildren<AnimationEvent>();
+            if (!_event) _event = _animator.gameObject.GetOrAddComponent<AnimationEvent>();
         }
 
         private void Start()
@@ -36,17 +35,22 @@ namespace CofyDev.RpgLegend
             });
         }
 
-        public void RegisterAnimEnd(Action<string> callback)
-        {
-            _event.RegisterCallback(callback);
-        }
-
         public void RegisterAnimationEnd(string animName, Action callback)
         {
             _event.RegisterAnimationEnd(hash =>
             {
                 if(Animator.StringToHash(animName) == hash) callback();
             });
+        }
+        
+        public void RegisterAnimationEvent(Action<string> callback)
+        {
+            _event.RegisterAnimEvent(callback);
+        }
+        
+        public void UnregisterAnimationEvent(Action<string> callback)
+        {
+            _event.UnregisterAnimEvent(callback);
         }
         
         public void SetFloat01(string paramName, float value)

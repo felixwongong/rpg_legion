@@ -5,7 +5,7 @@
         //Animation Name
         public const string A_Run = "A_Run";
         public const string A_Jump = "A_Jump";
-        public const string A_Attack = "A_Attack";
+        public const string A_Attack1 = "A_Attack1";
         
         //Animation State
         public const string S_Run = "S_Run";

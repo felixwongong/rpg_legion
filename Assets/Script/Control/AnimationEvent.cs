@@ -22,7 +22,7 @@ namespace CofyDev.RpgLegend
             onAnimationEnd = null;
         }
 
-        public void RegisterCallback(Action<string> action)
+        public void RegisterAnimEvent(Action<string> action)
         {
             onAnimationCallback += action;
         }
@@ -31,7 +31,13 @@ namespace CofyDev.RpgLegend
         {
             onAnimationEnd += action;
         }
+        
+        public void UnregisterAnimEvent(Action<string> action)
+        {
+            onAnimationCallback -= action;
+        }
 
+        //Used for animation event only
         public void OnAnimationEvent(string message)
         {
             onAnimationCallback?.Invoke(message);

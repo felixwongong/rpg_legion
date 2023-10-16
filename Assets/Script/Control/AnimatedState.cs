@@ -10,7 +10,9 @@ namespace CofyDev.RpgLegend
         [FormerlySerializedAs("_animator")] [SerializeField]
         protected CofyAnimator animator;
 
-        private Promise<bool> _animEndPromise = new ();
+        //State
+        private Promise<bool> _animEndPromise = new();
+        private Action<string> _eventAction;
         
         protected abstract string animName { get; }
         
@@ -30,12 +32,21 @@ namespace CofyDev.RpgLegend
         }
 
         public abstract void StartContext(IPromiseSM sm);
-            
-        public virtual void OnEndContext() { }
+
+        public virtual void OnEndContext()
+        {
+            animator.UnregisterAnimationEvent(_eventAction);
+        }
         
         protected void RegisterAnimationEndOnce(Action callback)
         {
             _animEndPromise.OnSucceed(_ => { callback.Invoke(); });
+        }
+        
+        protected void RegisterAnimationEvent(Action<string> callback)
+        {
+            _eventAction = callback; 
+            animator.RegisterAnimationEvent(_eventAction);
         }
     }
 }
