@@ -26,8 +26,6 @@ namespace CofyDev.RpgLegend
         private Vector2 velocity_Current;
         [SerializeField] private bool enableMovement;
 
-        protected override string animName => EAnimState.S_Run;
-
         protected override void Awake()
         {
             base.Awake();

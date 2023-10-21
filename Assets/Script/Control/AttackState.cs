@@ -6,8 +6,11 @@ namespace CofyDev.RpgLegend
     public class AttackState: AnimatedState
     {
         private Attacker _attacker;
-        
-        protected override string animName => EAnimState.A_Attack1;
+
+        private int comboIndex = 0;
+        private string[] animSeq = { EAnimState.A_Attack1, EAnimState.A_Attack2 };
+
+        private string curAnimName = string.Empty;
 
         protected override void Awake()
         {
@@ -18,18 +21,17 @@ namespace CofyDev.RpgLegend
         public override void StartContext(IPromiseSM sm)
         {
             sm.GetState<MoveState>().DisableInputWithCache();
-            
-            animator.PlayAnim(animName);
+
+            curAnimName = animSeq[comboIndex];
+            animator.PlayAnim(curAnimName);
+            comboIndex = (comboIndex + 1) % animSeq.Length;
             
             RegisterAnimationEvent(message =>
             {
                 Debug.Log(message);
             });
             
-            RegisterAnimationEndOnce(() =>
-            {
-                sm.GoToState<MoveState>();
-            });
+            RegisterAnimationEndOnce(curAnimName, sm.GoToState<MoveState>);
         }
     }
 }

@@ -4,14 +4,12 @@ namespace CofyDev.RpgLegend
 {
     public class JumpState : AnimatedState
     {
-        protected override string animName => EAnimState.A_Jump;
-
         public override void StartContext(IPromiseSM sm)
         {
-            animator.PlayAnim(animName);
+            animator.PlayAnim(EAnimState.A_Jump);
             sm.GetState<MoveState>().EnableMovementWithCache();
             
-            RegisterAnimationEndOnce(sm.GoToState<MoveState>);
+            RegisterAnimationEndOnce(EAnimState.A_Jump, sm.GoToState<MoveState>);
         }
     }
 }

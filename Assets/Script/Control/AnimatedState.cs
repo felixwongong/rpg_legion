@@ -1,52 +1,45 @@
 ﻿using System;
 using CofyEngine;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace CofyDev.RpgLegend
 {
     public abstract class AnimatedState : MonoBehaviour, IPromiseState
     {
-        [FormerlySerializedAs("_animator")] [SerializeField]
-        protected CofyAnimator animator;
+        [SerializeField] protected CofyAnimator animator;
 
-        //State
-        private Promise<bool> _animEndPromise = new();
-        private Action<string> _eventAction;
-        
-        protected abstract string animName { get; }
+        private IRegistration _eventReg;
+        private IRegistration _endReg;
         
         protected virtual void Awake()
         {
             if (!animator) animator = GetComponentInChildren<CofyAnimator>();
         }
-        
-        protected virtual void OnEnable()
+
+        private void OnDisable()
         {
-            animator.RegisterAnimationEnd(animName, () =>
-            {
-                _animEndPromise ??= new Promise<bool>();
-                _animEndPromise?.Resolve(true);
-                _animEndPromise?.Reset();
-            });
+            _eventReg = null;
+            _endReg = null;
         }
 
         public abstract void StartContext(IPromiseSM sm);
 
-        public virtual void OnEndContext()
-        {
-            animator.UnregisterAnimationEvent(_eventAction);
-        }
+        public virtual void OnEndContext(){}
         
-        protected void RegisterAnimationEndOnce(Action callback)
+        protected void RegisterAnimationEndOnce(string animName, Action callback)
         {
-            _animEndPromise.OnSucceed(_ => { callback.Invoke(); });
+            _endReg = animator.eventHandler.onAnimationEnd.AddListenerOnce(ended =>
+            {
+                if (ended == animName)
+                {
+                    callback();
+                }
+            });
         }
         
         protected void RegisterAnimationEvent(Action<string> callback)
         {
-            _eventAction = callback; 
-            animator.RegisterAnimationEvent(_eventAction);
+            _eventReg = animator.eventHandler.onAnimationCallback.AddListener(callback);
         }
     }
 }
