@@ -8,7 +8,8 @@ namespace CofyDev.RpgLegend
         private Attacker _attacker;
 
         private int comboIndex = 0;
-        private string[] animSeq = { EAnimState.A_Attack1, EAnimState.A_Attack2, EAnimState.A_Attack3 };
+        private string[] animSeq = 
+            { EAnimState.A_Attack1, EAnimState.A_Attack2, EAnimState.A_Attack3, EAnimState.A_Attack4 };
 
         private string curAnimName = string.Empty;
 

@@ -8,6 +8,7 @@
         public const string A_Attack1 = "A_Attack1";
         public const string A_Attack2 = "A_Attack2";
         public const string A_Attack3 = "A_Attack3";
+        public const string A_Attack4 = "A_Attack4";
         
         //Animation State
         public const string S_Run = "S_Run";
