@@ -23,9 +23,9 @@ public class Test: MonoBehaviour
 
     public void RegFirst()
     {
-        _reg1 = _event.AddListener(x => Debug.Log($"reg1: {x}"));
-        _reg2 = _event.AddListener(x => Debug.Log($"reg2: {x}"));
-        var localReg = _event.AddListener(x => Debug.Log($"localReg: {x}"));
+        _reg1 = _event.Register(x => Debug.Log($"reg1: {x}"));
+        _reg2 = _event.Register(x => Debug.Log($"reg2: {x}"));
+        var localReg = _event.Register(x => Debug.Log($"localReg: {x}"));
         _event.Invoke(1);
     }
 }

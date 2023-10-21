@@ -42,7 +42,6 @@ namespace CofyDev.RpgLegend
         public void OnCurrentAnimationEnd()
         {
             var currentHash = _animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
-            Debug.Log($"cur animation ended {_hashToName[currentHash]}");
             onAnimationEnd?.Invoke(_hashToName[currentHash]);
         }
     }

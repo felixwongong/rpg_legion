@@ -6,7 +6,7 @@ namespace CofyDev.RpgLegend
 {
     public abstract class AnimatedState : MonoBehaviour, IPromiseState
     {
-        [SerializeField] protected CofyAnimator animator;
+        protected CofyAnimator animator;
 
         private IRegistration _eventReg;
         private IRegistration _endReg;
@@ -22,24 +22,25 @@ namespace CofyDev.RpgLegend
             _endReg = null;
         }
 
-        public abstract void StartContext(IPromiseSM sm);
+        public abstract void StartContext(IPromiseSM sm, object param);
 
         public virtual void OnEndContext(){}
         
-        protected void RegisterAnimationEndOnce(string animName, Action callback)
+        protected IRegistration RegisterAnimationEndOnce(string animName, Action callback)
         {
-            _endReg = animator.eventHandler.onAnimationEnd.AddListenerOnce(ended =>
+            _endReg = animator.eventHandler.onAnimationEnd.RegisterOnce(ended =>
             {
                 if (ended == animName)
                 {
                     callback();
                 }
             });
+            return _endReg;
         }
         
         protected void RegisterAnimationEvent(Action<string> callback)
         {
-            _eventReg = animator.eventHandler.onAnimationCallback.AddListener(callback);
+            _eventReg = animator.eventHandler.onAnimationCallback.Register(callback);
         }
     }
 }

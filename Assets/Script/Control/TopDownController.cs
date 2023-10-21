@@ -18,6 +18,7 @@ namespace CofyDev.RpgLegend
             RegisterState(GetComponent<MoveState>());
             RegisterState(GetComponent<JumpState>());
             RegisterState(GetComponent<AttackState>());
+            RegisterState(GetComponent<PassThroughState>());
         }
 
         private void Start()
@@ -40,7 +41,11 @@ namespace CofyDev.RpgLegend
         {
             switch (context.action.name)
             {
-                case "Move": _moveState.OnMoveInput(context); break;
+                case "Move":
+                    if (currentState is PassThroughState && context.performed)
+                        GoToStateNoRepeat<MoveState>();     
+                    _moveState.OnMoveInput(context);
+                    break;
                 case "Jump": if(context.performed) GoToStateNoRepeat<JumpState>(); break;
                 case "Attack": if (context.performed)  GoToStateNoRepeat<AttackState>(); break;
             }

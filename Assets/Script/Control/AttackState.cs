@@ -8,7 +8,7 @@ namespace CofyDev.RpgLegend
         private Attacker _attacker;
 
         private int comboIndex = 0;
-        private string[] animSeq = { EAnimState.A_Attack1, EAnimState.A_Attack2 };
+        private string[] animSeq = { EAnimState.A_Attack1, EAnimState.A_Attack2, EAnimState.A_Attack3 };
 
         private string curAnimName = string.Empty;
 
@@ -18,20 +18,19 @@ namespace CofyDev.RpgLegend
             _attacker = GetComponent<PlayerController>().attacker;
         }
 
-        public override void StartContext(IPromiseSM sm)
+        public override void StartContext(IPromiseSM sm, object param)
         {
             sm.GetState<MoveState>().DisableInputWithCache();
 
+            if (sm.previousState is not PassThroughState)
+                comboIndex = 0;
+            
             curAnimName = animSeq[comboIndex];
             animator.PlayAnim(curAnimName);
             comboIndex = (comboIndex + 1) % animSeq.Length;
-            
-            RegisterAnimationEvent(message =>
-            {
-                Debug.Log(message);
-            });
-            
-            RegisterAnimationEndOnce(curAnimName, sm.GoToState<MoveState>);
+
+            RegisterAnimationEndOnce(curAnimName, 
+                () => sm.GoToState<PassThroughState>(new PassThroughStateParam() {animName = $"{curAnimName}_PT"}));
         }
     }
 }
