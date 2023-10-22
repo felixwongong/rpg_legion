@@ -38,9 +38,9 @@ namespace CofyDev.RpgLegend
             return _endReg;
         }
         
-        protected void RegisterAnimationEvent(Action<string> callback)
+        protected void RegisterAnimationCommand(Action<AnimationCommand> callback)
         {
-            _eventReg = animator.eventHandler.onAnimationCallback.Register(callback);
+            _eventReg = animator.eventHandler.onAnimationCommand.Register(callback);
         }
     }
 }

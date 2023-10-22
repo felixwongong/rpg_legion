@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using CofyEngine;
 using UnityEngine;
@@ -14,6 +13,7 @@ namespace CofyDev.RpgLegend
         
         public SmartEvent<string> onAnimationEnd = new();
         public SmartEvent<string> onAnimationCallback = new();
+        public SmartEvent<AnimationCommand> onAnimationCommand = new();
 
         private void Awake()
         {
@@ -36,13 +36,24 @@ namespace CofyDev.RpgLegend
         //Used for animation event only
         public void OnAnimationEvent(string message)
         {
-            onAnimationCallback?.Invoke(message);
+            onAnimationCallback.Invoke(message);
         }
+
+        public void OnAnimationCommand(AnimationCommand command)
+        {
+            onAnimationCommand.Invoke(command);    
+        } 
         
         public void OnCurrentAnimationEnd()
         {
             var currentHash = _animator.GetCurrentAnimatorStateInfo(0).shortNameHash;
             onAnimationEnd?.Invoke(_hashToName[currentHash]);
         }
+    }
+
+    public enum AnimationCommand
+    {
+        SPAWN_VFX,
+        STATE_TRIGGER
     }
 }
